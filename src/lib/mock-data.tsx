@@ -1,11 +1,20 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 // ============ TYPES ============
-export type Stage = "Applied" | "Screening" | "Technical Round" | "HR Round" | "Offered" | "Hired" | "Rejected";
+export type Stage =
+  | "applied"
+  | "screening"
+  | "technical_round"
+  | "hr_round"
+  | "offered"
+  | "hired"
+  | "rejected_stage";
 export type JobStatus = "Active" | "Paused" | "Closed";
 export type JobType = "Full-time" | "Part-time" | "Contract" | "Internship";
 export type WorkMode = "Remote" | "Hybrid" | "On-site";
-export type UserRole = "Super Admin" | "Recruiter" | "HR" | "Interviewer" | "Candidate";
+export type UserRole =
+  | "admin"
+  | "candidate";
 
 export interface Job {
   id: string;
@@ -37,27 +46,62 @@ export interface Candidate {
   atsScore: number;
   stage: Stage;
   skills: string[];
-  status: "Active" | "Rejected" | "Shortlisted" | "Hold";
+  // status: "Active" | "Rejected" | "Shortlisted" | "Hold";
+  status:
+  | "pending"
+  | "rejected"
+  | "shortlisted"
+  | "hold";
   appliedDate: string;
   department: string;
   resumeId?: string;
   bookmarked?: boolean;
 }
 
+
 export interface Resume {
-  id: string;
-  candidateId: string;
-  candidateName: string;
+  id: number;
+
+  candidate_name: string;
+
   email: string;
+
   department: string;
-  subDepartment: string;
+
+  sub_department: string;
+
   skills: string[];
+
   experience: number;
-  uploadedAt: string;
-  fileName: string;
-  fileSize: number;
-  atsScore: number;
-  bookmarked: boolean;
+
+  uploaded_at: string;
+
+  ats_score: number;
+
+  is_bookmarked: boolean;
+
+  resume_url: string;
+
+  strengths: string[];
+
+  weaknesses: string[];
+
+  missing_skills: string[];
+
+  recommended_roles: string[];
+
+  improvements: string[];
+
+  match_breakdown: {
+    skills_match: number;
+    experience_match: number;
+    education_match: number;
+    keywords_match: number;
+  };
+
+  ai_summary: string;
+
+  raw_text: string;
 }
 
 export interface Interview {
@@ -159,8 +203,23 @@ function seedJobs(): Job[] {
   }));
 }
 
-const STAGES: Stage[] = ["Applied", "Screening", "Technical Round", "HR Round", "Offered", "Hired", "Rejected"];
+// const STAGES: Stage[] = ["Applied", "Screening", "Technical Round", "HR Round", "Offered", "Hired", "Rejected"];
+const STAGES: Stage[] = [
 
+  "applied",
+
+  "screening",
+
+  "technical_round",
+
+  "hr_round",
+
+  "offered",
+
+  "hired",
+
+  "rejected_stage",
+];
 function seedCandidates(jobs: Job[]): Candidate[] {
   return Array.from({ length: 28 }).map((_, i) => {
     const job = jobs[i % jobs.length];
@@ -175,7 +234,15 @@ function seedCandidates(jobs: Job[]): Candidate[] {
       atsScore: 55 + Math.floor(Math.random() * 45),
       stage: STAGES[i % STAGES.length],
       skills: randomMany(SKILLS_POOL, 4),
-      status: randomFrom<Candidate["status"]>(["Active", "Active", "Shortlisted", "Hold", "Rejected"]),
+      // status: randomFrom<Candidate["status"]>(["Active", "Active", "Shortlisted", "Hold", "Rejected"]),
+      status:
+        randomFrom<Candidate["status"]>([
+          "pending",
+          "pending",
+          "shortlisted",
+          "hold",
+          "rejected"
+        ]),
       appliedDate: new Date(Date.now() - i * 86400000).toISOString(),
       department: job.department,
     };
@@ -215,15 +282,7 @@ function seedInterviews(candidates: Candidate[]): Interview[] {
   }));
 }
 
-function seedUsers(): User[] {
-  return [
-    { id: "u1", name: "Sarah Johnson", email: "sarah@company.com", role: "Super Admin", department: "HR", active: true },
-    { id: "u2", name: "Michael Chen", email: "michael@company.com", role: "Recruiter", department: "Web Development", active: true },
-    { id: "u3", name: "Priya Sharma", email: "priya@company.com", role: "HR", department: "HR", active: true },
-    { id: "u4", name: "David Kumar", email: "david@company.com", role: "Interviewer", department: "Data Science", active: true },
-    { id: "u5", name: "Anna Lee", email: "anna@company.com", role: "Recruiter", department: "UI/UX", active: false },
-  ];
-}
+  
 
 function seedDepartments(): Department[] {
   return DEPARTMENTS.map((name, i) => ({
@@ -317,7 +376,7 @@ function loadInitial() {
     candidates,
     resumes,
     interviews,
-    users: seedUsers(),
+    users: [],
     departments: seedDepartments(),
     notifications: seedNotifications(),
     notes: [] as Note[],

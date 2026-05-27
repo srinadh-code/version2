@@ -19,12 +19,14 @@ const menu = [
   { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/admin/jobs", label: "Job Openings", icon: Briefcase },
   { to: "/admin/candidates", label: "Candidates", icon: Users },
-  { to: "/admin/resumes", label: "All Resumes", icon: FileText },
+  { to: "/admin/triage", label: "Triage", icon: Filter },
   { to: "/admin/pipeline", label: "Pipeline", icon: Trello },
+  { to: "/admin/resumes", label: "All Resumes", icon: FileText },
+  
   { to: "/admin/interviews", label: "Interviews", icon: CalendarDays },
   { to: "/admin/calendar", label: "Calendar", icon: CalendarRange },
   { to: "/admin/ai-analysis", label: "AI Analysis", icon: Sparkles },
-  { to: "/admin/triage", label: "Triage", icon: Filter },
+  
   { to: "/admin/notes", label: "Notes", icon: StickyNote },
   { to: "/admin/notifications", label: "Notifications", icon: Bell },
   { to: "/admin/inbox", label: "Email Inbox", icon: Mail },

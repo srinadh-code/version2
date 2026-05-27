@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ function AIPage() {
           <CardContent className="p-2 space-y-1">
             {resumes.map(r => (
               <button key={r.id} onClick={() => setSelected(r)} className={`w-full text-left p-3 rounded-lg transition ${selected?.id === r.id ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}>
-                <div className="font-medium text-sm">{r.candidateName}</div>
+                <div className="font-medium text-sm">{r.candidate_name}</div>
                 <div className="text-xs text-muted-foreground flex justify-between mt-0.5"><span>{r.department}</span><span className="text-primary font-semibold">{r.atsScore}%</span></div>
               </button>
             ))}
